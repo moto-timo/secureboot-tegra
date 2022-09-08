@@ -109,7 +109,7 @@ An example (correct) ``odmfuse_pkc.xml`` would look like:
 
 NVidia recommends burning all the fuses at once, with the ``fuseblob.tbz2`` generated previously. Assuming you extracted this to ``fuseblob``, you are now ready to burn the fuses.
 
-WARNING: The fuses can only be changed from a "zero" to a "one" once. The following command will permanently change the state of the fuses on your board. If anything was wrong in the prior steps, you might render your board unbootable.
+WARNING: The fuses can only be changed from a "zero" to a "one" once. The following command will permanently change the state of the fuses on your board. If anything was wrong in the prior steps, you might render your board [unbootable](https://forums.developer.nvidia.com/t/postmortem-jetson-xavier-agx-will-not-get-past-boot-rom-after-burning-pkc-sbk-kek256/208426).
 
 Put the device into Forced Recovery mode.
 
