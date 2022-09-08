@@ -52,6 +52,31 @@ echo "0x${raw_hex:0:8} 0x${raw_hex:8:8} 0x${raw_hex:16:8} 0x${raw_hex:(-8)}" > s
 # If you want to encrypt kernel image (the kernel, kernel-dtb, initrd,
 # and extlinux.conf files), you must prepare the user key. You need the
 # user key as well as the SBK key and the PKC key.
+#
+# Two formats are needed, one is used with the flash.sh or similar commands the other is
+# used in gen_ekb.py to generate eks.img
 echo "Generating user_key"
 raw_hex=$(openssl rand -rand /dev/urandom -hex 16)
-echo "0x${raw_hex:0:8} 0x${raw_hex:8:8} 0x${raw_hex:16:8} 0x${raw_hex:(-8)}" > user_key_hex_file
+echo "${raw_hex}" > user_key_for_eks_hex_file
+echo "0x${raw_hex:0:8} 0x${raw_hex:8:8} 0x${raw_hex:16:8} 0x${raw_hex:(-8)}" > user_key_for_flash_hex_file
+
+# For disk encryption
+echo "Generating  ekb.key"
+# 32.6.1 docs say
+#echo "00000000000000000000000000000000" > ekb.key
+# 32.7.1 docs say
+#echo "96cdb5da247b37bb536e9f5506d37e52" > ekb.key
+openssl rand -rand /dev/urandom -hex 16 > ekb.key
+
+echo "Generating Fixed Vector (FV)"
+# This is the default initial vector for EKB.
+echo "bad66eb4484983684b992fe54a648bb8" > fv_ekb_hex_file
+# Only if you are recompiling the hwkey-agent and luks-srv Trusted Applications (TA) and the Trusted Operating System (TOS)
+# Otherwise you need to use the default
+#openssl rand -rand /dev/urandom -hex 16 > fv_ekb_hex_file
+# You can use multiple Fixed Vectors, for instance for the SSK
+#openssl rand -rand /dev/urandom -hex 16 > fv_ssk_hex_file
+
+# https://forums.developer.nvidia.com/t/enabling-disk-encryption-doesnt-boot-the-device-jetson-xavier-nx-p3668-0001/208615
+# (which references https://forums.developer.nvidia.com/t/encrypted-filesystem-works-on-32-6-1-but-not-on-32-5-1/205243)
+# python3 ${GEN_EKB_PATH}/gen_ekb.py -kek2_key ${XAVIER_KEYS}/kek2_hex_file -fv ${XAVIER_KEYS}/fv_hex_file -in_sym_key ${XAVIER_KEYS}/user_key_for_eks_hex_file -in_sym_key2 ${XAVIER_KEYS}/ekb.key -out eks.img
