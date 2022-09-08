@@ -12,3 +12,8 @@ echo "Extracting ${SAMPLE_FS_PACKAGE}"
 sudo tar xpf ${SAMPLE_FS_PACKAGE}
 cd ..
 sudo ./apply_binaries.sh
+cd ..
+echo "Extracting ${L4T_SOURCES_PACKAGE}"
+sudo tar xpf ${L4T_SOURCES_PACKAGE}
+echo "Extracting ${TRUSTY_SOURCES_PACKAGE}"
+sudo tar -C ${SOURCES_BASE_DIR} -xpf ${TRUSTY_SOURCES_PACKAGE}
