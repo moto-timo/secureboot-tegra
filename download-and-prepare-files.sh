@@ -13,5 +13,8 @@ fi
 if [ ! -f ${SAMPLE_FS_PACKAGE} ]; then
     wget ${BASEURL}/${SAMPLE_FS_PACKAGE_NAME}
 fi
+if [ ! -f ${L4T_SOURCES_PACKAGE} ]; then
+    wget ${SOURCES_BASEURL}/${L4T_SOURCES_PACKAGE_NAME}
+fi
 popd
 ./preparing-for-use.sh
